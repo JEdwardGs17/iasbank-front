@@ -87,11 +87,15 @@ Debe usarse el puerto 4200, porque es el origen que el backend permite. Si la ap
 
 ### Opción 2: aplicación completa con Docker Compose
 
-Desde la carpeta que contiene `IASBank`, `IASBankFront` y `docker-compose.yml`:
+El `docker-compose.yml` está en el repositorio del backend y construye este frontend desde GitHub:
 
 ```bash
+git clone https://github.com/JEdwardGs17/iasbank-back.git
+cd iasbank-back
 docker compose up --build -d
 ```
+
+Para usar esta copia local del frontend en lugar de la de GitHub: `FRONTEND_PATH=../iasbank-front docker compose up --build -d`, con los dos repositorios clonados en la misma carpeta.
 
 La aplicación queda en http://localhost:4200. La imagen compila Angular en modo producción y lo sirve con nginx, que reenvía `/api` al backend (`nginx.conf`). Por eso en producción la API se llama con la ruta relativa `/api` (`src/environments/environment.prod.ts`).
 
@@ -114,7 +118,7 @@ La aplicación queda en http://localhost:4200. La imagen compila Angular en modo
 npm test
 ```
 
-**De extremo a extremo** con [Playwright Test](https://github.com/microsoft/playwright): 30 pruebas que usan la aplicación completa en Chrome, contra el backend real. Requiere la aplicación corriendo con Docker (`docker compose up -d` desde `PlataformaBancaria`) y Google Chrome instalado.
+**De extremo a extremo** con [Playwright Test](https://github.com/microsoft/playwright): 30 pruebas que usan la aplicación completa en Chrome, contra el backend real. Requiere la aplicación corriendo con Docker (`docker compose up --build -d` desde [iasbank-back](https://github.com/JEdwardGs17/iasbank-back#cómo-levantar-el-backend)) y Google Chrome instalado.
 
 ```bash
 npm run e2e           # ejecuta todas
@@ -147,12 +151,12 @@ Cómo funcionan en esta app:
 | **Ejecución** | Una prueba a la vez (`workers: 1`), porque todas comparten el mismo backend |
 | **Fallas** | Se guardan captura de pantalla y *trace* de la prueba fallida en `test-results/`, visibles en el reporte HTML |
 
-La relación entre cada requerimiento y las pruebas que lo demuestran está en [IASBank/docs/pruebas.md](../IASBank/docs/pruebas.md).
+La relación entre cada requerimiento y las pruebas que lo demuestran está en [IASBank/docs/pruebas.md](https://github.com/JEdwardGs17/iasbank-back/blob/master/docs/pruebas.md).
 
 ## Decisiones técnicas
 
-Las decisiones del frontend y del sistema completo están registradas en el ADR [IASBank/docs/decisiones-tecnicas.md](../IASBank/docs/decisiones-tecnicas.md); la del frontend es la [ADR-11](../IASBank/docs/decisiones-tecnicas.md#adr-11).
+Las decisiones del frontend y del sistema completo están registradas en el ADR [IASBank/docs/decisiones-tecnicas.md](https://github.com/JEdwardGs17/iasbank-back/blob/master/docs/decisiones-tecnicas.md); la del frontend es la [ADR-11](https://github.com/JEdwardGs17/iasbank-back/blob/master/docs/decisiones-tecnicas.md#adr-11).
 
 ## Uso de Inteligencia Artificial
 
-Documentado para todo el proyecto en [IASBank/docs/uso-de-ia.md](../IASBank/docs/uso-de-ia.md).
+Documentado para todo el proyecto en [IASBank/docs/uso-de-ia.md](https://github.com/JEdwardGs17/iasbank-back/blob/master/docs/uso-de-ia.md).

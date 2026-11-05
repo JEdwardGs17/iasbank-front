@@ -14,7 +14,7 @@ export default async function globalSetup(): Promise<void> {
     );
     if (!reachable) {
       throw new Error(
-        `${name} is not reachable at ${url}. Start the application with "docker compose up -d".`,
+        `${name} is not reachable at ${url}. Start the application with "docker compose up --build -d" from iasbank-back.`,
       );
     }
   }

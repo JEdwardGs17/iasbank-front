@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * End-to-end tests against the full application running in Docker
- * (`docker compose up -d` from PlataformaBancaria). Run with `npm run e2e`.
+ * (`docker compose up --build -d` from the iasbank-back repository). Run with `npm run e2e`.
  */
 export default defineConfig({
   testDir: './e2e',
