@@ -1,0 +1,30 @@
+<div class="summary">
+  @for (item of statuses; track item.status) {
+    <button
+      type="button"
+      class="stat"
+      [class]="tones[item.status]"
+      [class.selected]="selected() === item.status"
+      [attr.aria-pressed]="selected() === item.status"
+      (click)="toggle(item.status)"
+    >
+      <span class="label">{{ labels[item.status] }}</span>
+      <strong class="value">{{ summary()[item.key] }}</strong>
+      <span class="hint">{{ item.hint }}</span>
+    </button>
+  }
+
+  <div class="stat queue" [class.offline]="summary().queuedMessages === null">
+    <span class="label">
+      <app-icon name="inbox" />
+      Mensajes en la cola
+    </span>
+    @if (summary().queuedMessages === null) {
+      <strong class="value">—</strong>
+      <span class="hint">RabbitMQ no disponible</span>
+    } @else {
+      <strong class="value">{{ summary().queuedMessages }}</strong>
+      <span class="hint">En RabbitMQ, listos para ser consumidos</span>
+    }
+  </div>
+</div>

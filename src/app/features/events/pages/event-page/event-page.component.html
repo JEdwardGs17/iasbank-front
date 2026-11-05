@@ -1,0 +1,52 @@
+<div class="page">
+  <header class="page-header with-action">
+    <div>
+      <h1>Eventos</h1>
+      <p>
+        Eventos de transferencias autorizadas publicados en RabbitMQ (exchange
+        <span class="mono">iasbank.transfers</span>, cola
+        <span class="mono">iasbank.transfers.authorized</span>).
+      </p>
+    </div>
+    <div class="toolbar">
+      <a class="btn btn-secondary" [href]="rabbitMqConsoleUrl" target="_blank" rel="noopener"
+        >Consola de RabbitMQ</a
+      >
+      <button type="button" class="btn btn-primary" [disabled]="loading()" (click)="refresh()">
+        <app-icon name="refresh" />
+        Actualizar
+      </button>
+    </div>
+  </header>
+
+  @if (summary(); as summary) {
+    <app-event-summary [summary]="summary" [selected]="status()" (filter)="filterBy($event)" />
+  }
+
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <h2>{{ title() }}</h2>
+        <p>
+          Máximo {{ summary()?.maxRetries ?? 3 }} reintentos de publicación con espera creciente (5
+          s, 10 s, 20 s). Se actualiza automáticamente cada {{ autoRefreshSeconds }} s.
+        </p>
+      </div>
+      @if (status()) {
+        <button type="button" class="btn btn-secondary btn-sm" (click)="filterBy(null)">
+          <app-icon name="close" />
+          Quitar filtro
+        </button>
+      }
+    </div>
+
+    @if (events(); as page) {
+      <app-event-table [events]="page.content" />
+      @if (page.totalElements > 0) {
+        <app-pagination [page]="page" itemLabel="eventos" (pageChange)="load($event)" />
+      }
+    } @else {
+      <div class="empty-state"><span>Cargando eventos...</span></div>
+    }
+  </section>
+</div>
