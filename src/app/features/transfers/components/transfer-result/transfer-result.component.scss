@@ -1,0 +1,110 @@
+.result {
+  --accent: var(--success);
+  --accent-soft: var(--success-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &.rejected {
+    --accent: var(--danger);
+    --accent-soft: var(--danger-soft);
+  }
+}
+
+header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+
+  h3 {
+    color: var(--accent);
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin-top: 0.15rem;
+    font-size: 0.875rem;
+  }
+}
+
+.status-icon {
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+
+  app-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.replay-note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--info-soft);
+  color: var(--info);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.amount {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-muted);
+
+  div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  small {
+    font-size: 0.75rem;
+  }
+
+  /* The result shows the whole account number: a long one wraps on narrow screens. */
+  strong {
+    color: var(--text);
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  app-icon {
+    flex-shrink: 0;
+  }
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+
+  dt {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .reference {
+    word-break: break-all;
+  }
+}

@@ -1,0 +1,55 @@
+<article class="result" [class.authorized]="authorized()" [class.rejected]="!authorized()">
+  <header>
+    <span class="status-icon"><app-icon [name]="authorized() ? 'success' : 'error'" /></span>
+    <div>
+      <h3>{{ authorized() ? 'Transferencia autorizada' : 'Transferencia rechazada' }}</h3>
+      <p>
+        {{
+          authorized()
+            ? 'El valor fue debitado de la cuenta origen y acreditado en la cuenta destino.'
+            : (transfer().rejectionReason | rejectionReason)
+        }}
+      </p>
+    </div>
+  </header>
+
+  @if (replayed()) {
+    <div class="replay-note">
+      <app-icon name="clock" />
+      Esta referencia ya había sido procesada. Se muestra el resultado original.
+    </div>
+  }
+
+  <div class="amount">{{ transfer().amount | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</div>
+
+  <div class="route">
+    <div>
+      <small>Origen</small>
+      <strong>{{ transfer().sourceAccountId }}</strong>
+    </div>
+    <app-icon name="arrowRight" />
+    <div>
+      <small>Destino</small>
+      <strong>{{ transfer().destinationAccountId }}</strong>
+    </div>
+  </div>
+
+  <dl class="details">
+    <div>
+      <dt>Estado</dt>
+      <dd><app-status-badge [status]="transfer().status" /></dd>
+    </div>
+    <div>
+      <dt>Motivo</dt>
+      <dd>{{ transfer().rejectionReason | rejectionReason }}</dd>
+    </div>
+    <div>
+      <dt>Fecha de procesamiento</dt>
+      <dd>{{ transfer().processedAt | date: 'dd/MM/yyyy HH:mm:ss' }}</dd>
+    </div>
+    <div>
+      <dt>Referencia</dt>
+      <dd class="mono reference">{{ transfer().requestReference }}</dd>
+    </div>
+  </dl>
+</article>

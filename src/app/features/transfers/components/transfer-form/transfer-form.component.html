@@ -1,0 +1,47 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+  <div class="field">
+    <label for="sourceAccountId">Cuenta origen</label>
+    <select id="sourceAccountId" class="input" formControlName="sourceAccountId">
+      <option value="" disabled>Selecciona una cuenta</option>
+      @for (account of accounts(); track account.id) {
+        <option [value]="account.accountNumber">{{ account.accountNumber }}</option>
+      }
+    </select>
+    @if (showError('sourceAccountId')) {
+      <span class="error">Selecciona la cuenta origen</span>
+    } @else if (sourceDailyLimit(); as limit) {
+      <span class="hint"
+        >Límite diario de la cuenta: {{ limit | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span
+      >
+    }
+  </div>
+
+  <div class="field">
+    <label for="destinationAccountId">Cuenta destino</label>
+    <select id="destinationAccountId" class="input" formControlName="destinationAccountId">
+      <option value="" disabled>Selecciona una cuenta</option>
+      @for (account of accounts(); track account.id) {
+        <option [value]="account.accountNumber">{{ account.accountNumber }}</option>
+      }
+    </select>
+    @if (showError('destinationAccountId')) {
+      <span class="error">Selecciona la cuenta destino</span>
+    }
+    @if (form.hasError('sameAccount')) {
+      <span class="error">La cuenta destino debe ser diferente a la cuenta origen</span>
+    }
+  </div>
+
+  <div class="field">
+    <label for="amount">Monto (COP)</label>
+    <input id="amount" class="input" formControlName="amount" appAmountInput placeholder="Ej. 600.000" />
+    @if (showError('amount')) {
+      <span class="error">El monto debe ser mayor a cero</span>
+    }
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid || processing()">
+    <app-icon name="transfer" />
+    {{ processing() ? 'Procesando...' : 'Transferir' }}
+  </button>
+</form>

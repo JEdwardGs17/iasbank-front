@@ -1,0 +1,58 @@
+<div class="page">
+  <header class="page-header">
+    <h1>Nueva transferencia</h1>
+    <p>Registra una transferencia entre cuentas y conoce su resultado al instante.</p>
+  </header>
+
+  <div class="layout">
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2>Datos de la transferencia</h2>
+          <p>La referencia única se genera automáticamente.</p>
+        </div>
+      </div>
+      <app-transfer-form
+        [accounts]="accounts()"
+        [processing]="processing()"
+        (submitted)="processTransfer($event)"
+      />
+    </section>
+
+    <section class="card result-card">
+      <div class="card-header">
+        <h2>Resultado</h2>
+      </div>
+
+      @if (pendingRetry()) {
+        <div class="retry">
+          <app-icon name="warning" />
+          <div>
+            <strong>No se obtuvo respuesta del servidor</strong>
+            <span
+              >Puedes reintentar sin riesgo: se usa la misma referencia, así que no se
+              duplicará.</span
+            >
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [disabled]="processing()"
+            (click)="retry()"
+          >
+            <app-icon name="refresh" />
+            Reintentar
+          </button>
+        </div>
+      } @else if (result(); as result) {
+        <app-transfer-result [transfer]="result.transfer" [replayed]="result.replayed" />
+      } @else {
+        <div class="empty-state">
+          <app-icon name="transfer" />
+          <strong>Aún no hay resultado</strong>
+          <span>Completa el formulario y presiona Transferir.</span>
+        </div>
+      }
+    </section>
+  </div>
+</div>
