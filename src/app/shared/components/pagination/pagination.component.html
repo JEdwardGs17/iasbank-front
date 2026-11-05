@@ -1,0 +1,26 @@
+<footer class="pagination">
+  <span class="summary">
+    Página <strong>{{ page().page + 1 }}</strong> de <strong>{{ page().totalPages }}</strong> ·
+    {{ page().totalElements }} {{ itemLabel() }}
+  </span>
+  <div class="toolbar">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      [disabled]="page().page === 0"
+      (click)="pageChange.emit(page().page - 1)"
+    >
+      <app-icon name="chevronLeft" />
+      Anterior
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      [disabled]="page().page + 1 >= page().totalPages"
+      (click)="pageChange.emit(page().page + 1)"
+    >
+      Siguiente
+      <app-icon name="chevronRight" />
+    </button>
+  </div>
+</footer>

@@ -1,0 +1,86 @@
+<div class="page">
+  <header class="page-header">
+    <h1>Transferencias</h1>
+    <p>Transferencias procesadas por el sistema, de la más reciente a la más antigua.</p>
+  </header>
+
+  <section class="card">
+    <div class="card-header">
+      <form class="search" [formGroup]="searchForm" (ngSubmit)="search()">
+        <div class="search-input">
+          <app-icon name="search" />
+          <input
+            type="text"
+            class="input"
+            placeholder="Buscar por referencia"
+            aria-label="Buscar por referencia"
+            formControlName="reference"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="searchForm.invalid || loading()">
+          Buscar
+        </button>
+        @if (searchedReference()) {
+          <button type="button" class="btn btn-secondary" (click)="clearSearch()">
+            <app-icon name="close" />
+            Limpiar
+          </button>
+        }
+      </form>
+
+      <div class="toolbar">
+        @if (!searchedReference()) {
+          <label class="sr-only" for="pageSize">Transferencias por página</label>
+          <select
+            id="pageSize"
+            class="input page-size"
+            [value]="pageSize()"
+            (change)="changePageSize($any($event.target).value)"
+          >
+            @for (size of pageSizes; track size) {
+              <option [value]="size">{{ size }} por página</option>
+            }
+          </select>
+        }
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          [disabled]="loading()"
+          (click)="refresh()"
+        >
+          <app-icon name="refresh" />
+          Actualizar
+        </button>
+      </div>
+    </div>
+
+    @if (searchedReference(); as reference) {
+      <p class="search-summary">
+        Resultado de la búsqueda por la referencia <strong class="mono">{{ reference }}</strong>
+      </p>
+      <app-transfer-table
+        [transfers]="rows()"
+        emptyTitle="No se encontró la transferencia"
+        [emptyText]="'No existe una transferencia con la referencia ' + reference + '.'"
+        (viewDetail)="openDetail($event)"
+      />
+    } @else if (transfers(); as page) {
+      <app-transfer-table [transfers]="rows()" (viewDetail)="openDetail($event)" />
+      @if (page.totalElements > 0) {
+        <app-pagination [page]="page" itemLabel="transferencias" (pageChange)="load($event)" />
+      }
+    } @else {
+      <div class="empty-state"><span>Cargando transferencias...</span></div>
+    }
+  </section>
+</div>
+
+@if (detailReference()) {
+  <app-modal title="Detalle de la transferencia" size="lg" (closed)="closeDetail()">
+    @if (detail(); as detail) {
+      <app-transfer-result [transfer]="detail" />
+    } @else {
+      <div class="empty-state"><span>Cargando detalle...</span></div>
+    }
+  </app-modal>
+}

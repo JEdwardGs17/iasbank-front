@@ -1,0 +1,64 @@
+@if (transfers().length === 0) {
+  <div class="empty-state">
+    <app-icon name="inbox" />
+    <strong>{{ emptyTitle() }}</strong>
+    <span>{{ emptyText() }}</span>
+  </div>
+} @else {
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Referencia</th>
+          <th>Origen → Destino</th>
+          <th class="num">Monto</th>
+          <th>Estado</th>
+          <th>Motivo</th>
+          <th>Procesada</th>
+          <th class="actions-col"><span class="sr-only">Acciones</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (transfer of transfers(); track transfer.id) {
+          <tr>
+            <td>
+              <span class="mono truncate reference" [title]="transfer.requestReference">
+                {{ transfer.requestReference }}
+              </span>
+            </td>
+            <td>
+              <span class="route">
+                <span class="truncate account" [title]="transfer.sourceAccountId">{{
+                  transfer.sourceAccountId
+                }}</span>
+                <app-icon name="arrowRight" />
+                <span class="truncate account" [title]="transfer.destinationAccountId">{{
+                  transfer.destinationAccountId
+                }}</span>
+              </span>
+            </td>
+            <td class="num">{{ transfer.amount | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td><app-status-badge [status]="transfer.status" /></td>
+            <td class="muted reason">{{ transfer.rejectionReason | rejectionReason }}</td>
+            <td>
+              <span class="date">
+                {{ transfer.processedAt | date: 'dd/MM/yyyy' }}
+                <small>{{ transfer.processedAt | date: 'HH:mm:ss' }}</small>
+              </span>
+            </td>
+            <td class="actions-col">
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                (click)="viewDetail.emit(transfer)"
+              >
+                <app-icon name="eye" />
+                Ver detalle
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
