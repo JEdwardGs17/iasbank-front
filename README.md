@@ -159,4 +159,4 @@ Las decisiones del frontend y del sistema completo están registradas en el ADR 
 
 ## Uso de Inteligencia Artificial
 
-Documentado para todo el proyecto en [IASBank/docs/uso-de-ia.md](https://github.com/JEdwardGs17/iasbank-back/blob/master/docs/uso-de-ia.md).
+Documentado para todo el proyecto en el backend: [docs/uso-de-ia.md](https://github.com/JEdwardGs17/iasbank-back/blob/master/docs/uso-de-ia.md).
