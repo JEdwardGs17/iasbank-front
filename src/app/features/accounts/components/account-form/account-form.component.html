@@ -1,0 +1,54 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+  <div class="field">
+    <label for="accountNumber">Número de cuenta</label>
+    <input
+      id="accountNumber"
+      class="input"
+      formControlName="accountNumber"
+      placeholder="Ej. CTA-3001"
+    />
+    @if (showError('accountNumber')) {
+      <span class="error">El número de cuenta es requerido</span>
+    }
+  </div>
+
+  <div class="field">
+    <label for="holder">Titular</label>
+    <input id="holder" class="input" formControlName="holder" />
+    @if (showError('holder')) {
+      <span class="error">El titular es requerido</span>
+    }
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="balance">Saldo inicial (COP)</label>
+      <input id="balance" class="input" formControlName="balance" type="number" min="0" />
+      @if (showError('balance')) {
+        <span class="error">El saldo debe ser 0 o mayor</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="dailyLimit">Límite diario (COP)</label>
+      <input id="dailyLimit" class="input" formControlName="dailyLimit" type="number" min="1" />
+      @if (showError('dailyLimit')) {
+        <span class="error">El límite debe ser mayor a cero</span>
+      }
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="accountType">Tipo de cuenta</label>
+    <select id="accountType" class="input" formControlName="accountType">
+      @for (type of accountTypes; track type) {
+        <option [value]="type">{{ typeLabels[type] }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn btn-secondary" (click)="cancelled.emit()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Crear cuenta</button>
+  </div>
+</form>

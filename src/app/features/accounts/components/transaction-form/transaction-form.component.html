@@ -1,0 +1,31 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+  <p class="balance">
+    Saldo actual de <strong>{{ account().accountNumber }}</strong
+    >:
+    {{ account().balance | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+  </p>
+
+  <div class="field">
+    <label for="transactionAmount">
+      Monto a {{ type() === 'deposit' ? 'depositar' : 'retirar' }} (COP)
+    </label>
+    <input
+      id="transactionAmount"
+      class="input"
+      formControlName="amount"
+      type="number"
+      min="1"
+      placeholder="Ej. 100000"
+    />
+    @if (form.controls.amount.invalid && form.controls.amount.touched) {
+      <span class="error">El monto debe ser mayor a cero</span>
+    }
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn btn-secondary" (click)="cancelled.emit()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      {{ type() === 'deposit' ? 'Depositar' : 'Retirar' }}
+    </button>
+  </div>
+</form>

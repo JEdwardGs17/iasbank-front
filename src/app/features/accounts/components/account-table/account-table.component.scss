@@ -1,0 +1,19 @@
+/* Account numbers can have up to 20 characters: long ones are cut, the full one is in the tooltip. */
+.account-number {
+  max-width: 6.5rem;
+}
+
+.actions-col {
+  text-align: right;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  color: var(--danger);
+}

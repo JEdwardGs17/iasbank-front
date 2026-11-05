@@ -1,0 +1,70 @@
+<div class="page">
+  <header class="page-header with-action">
+    <div>
+      <h1>Cuentas</h1>
+      <p>Cuentas disponibles para transferir, con su saldo y límite diario.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="creating.set(true)">
+      <app-icon name="plus" />
+      Nueva cuenta
+    </button>
+  </header>
+
+  <section class="card">
+    <app-account-table
+      [accounts]="accounts()"
+      (deposit)="transaction.set({ account: $event, type: 'deposit' })"
+      (withdraw)="transaction.set({ account: $event, type: 'withdraw' })"
+      (editLimit)="limitAccount.set($event)"
+      (remove)="accountToDelete.set($event)"
+    />
+  </section>
+</div>
+
+@if (creating()) {
+  <app-modal title="Nueva cuenta" (closed)="creating.set(false)">
+    <app-account-form (submitted)="createAccount($event)" (cancelled)="creating.set(false)" />
+  </app-modal>
+}
+
+@if (transaction(); as transaction) {
+  <app-modal [title]="transactionTitle()" (closed)="this.transaction.set(null)">
+    <app-transaction-form
+      [account]="transaction.account"
+      [type]="transaction.type"
+      (submitted)="confirmTransaction($event)"
+      (cancelled)="this.transaction.set(null)"
+    />
+  </app-modal>
+}
+
+@if (limitAccount(); as account) {
+  <app-modal title="Límite diario" (closed)="limitAccount.set(null)">
+    <app-daily-limit-form
+      [account]="account"
+      (submitted)="updateDailyLimit(account, $event)"
+      (cancelled)="limitAccount.set(null)"
+    />
+  </app-modal>
+}
+
+@if (accountToDelete(); as account) {
+  <app-modal title="Eliminar cuenta" (closed)="accountToDelete.set(null)">
+    <div class="form-grid">
+      <p>
+        ¿Seguro que deseas eliminar la cuenta <strong>{{ account.accountNumber }}</strong> con saldo
+        de {{ account.balance | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}? Esta acción no se
+        puede deshacer.
+      </p>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="accountToDelete.set(null)">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteAccount()">
+          <app-icon name="trash" />
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </app-modal>
+}

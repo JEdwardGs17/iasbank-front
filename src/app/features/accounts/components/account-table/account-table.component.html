@@ -1,0 +1,67 @@
+@if (accounts().length === 0) {
+  <div class="empty-state">
+    <app-icon name="bank" />
+    <strong>No hay cuentas registradas</strong>
+    <span>Crea una cuenta para comenzar.</span>
+  </div>
+} @else {
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Cuenta</th>
+          <th>Titular</th>
+          <th>Tipo</th>
+          <th class="num">Saldo</th>
+          <th class="num">Límite diario</th>
+          <th class="actions-col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (account of accounts(); track account.id) {
+          <tr>
+            <td>
+              <strong class="truncate account-number" [title]="account.accountNumber">{{
+                account.accountNumber
+              }}</strong>
+            </td>
+            <td>{{ account.holder }}</td>
+            <td class="muted">{{ typeLabels[account.accountType] }}</td>
+            <td class="num">{{ account.balance | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td class="num muted">
+              {{ account.dailyLimit | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+            </td>
+            <td>
+              <div class="actions">
+                <button type="button" class="btn btn-ghost btn-sm" (click)="deposit.emit(account)">
+                  <app-icon name="deposit" />
+                  Depositar
+                </button>
+                <button type="button" class="btn btn-ghost btn-sm" (click)="withdraw.emit(account)">
+                  <app-icon name="withdraw" />
+                  Retirar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm"
+                  (click)="editLimit.emit(account)"
+                >
+                  <app-icon name="edit" />
+                  Límite
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm danger"
+                  (click)="remove.emit(account)"
+                >
+                  <app-icon name="trash" />
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
